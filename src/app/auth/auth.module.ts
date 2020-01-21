@@ -1,3 +1,4 @@
+import { authReducer } from './reducers/index';
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LoginComponent} from './login/login.component';
@@ -19,9 +20,7 @@ import * as fromAuth from './reducers';
         MatInputModule,
         MatButtonModule,
         RouterModule.forChild([{path: '', component: LoginComponent}]),
-        StoreModule.forFeature(
-            'auth',
-            fromAuth.reducers)
+        StoreModule.forFeature('auth', authReducer)
     ],
     declarations: [LoginComponent],
     exports: [LoginComponent]
