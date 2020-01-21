@@ -1,3 +1,4 @@
+import { AuthEffects } from './auth.effects';
 import { authReducer } from './reducers/index';
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -21,7 +22,8 @@ import { AuthGuard } from './auth.guard';
         MatInputModule,
         MatButtonModule,
         RouterModule.forChild([{path: '', component: LoginComponent}]),
-        StoreModule.forFeature('auth', authReducer)
+        StoreModule.forFeature('auth', authReducer),
+        EffectsModule.forFeature([AuthEffects])
     ],
     declarations: [LoginComponent],
     exports: [LoginComponent]
