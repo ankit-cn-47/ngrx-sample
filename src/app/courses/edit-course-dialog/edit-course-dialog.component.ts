@@ -1,9 +1,9 @@
+import { CourseEntityService } from './../services/course-entity.service';
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Course} from '../model/course';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {CoursesHttpService} from '../services/courses-http.service';
 
 @Component({
   selector: 'course-dialog',
@@ -20,13 +20,13 @@ export class EditCourseDialogComponent {
 
   mode: 'create' | 'update';
 
-  loading$:Observable<boolean>;
+  loading$: Observable<boolean>;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditCourseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private coursesService: CoursesHttpService) {
+    private coursesService: CourseEntityService) {
 
     this.dialogTitle = data.dialogTitle;
     this.course = data.course;
@@ -62,13 +62,15 @@ export class EditCourseDialogComponent {
       ...this.course,
       ...this.form.value
     };
-
-    this.coursesService.saveCourse(course.id, course)
-      .subscribe(
-        () => this.dialogRef.close()
-      )
-
-
+    if (this.mode === 'update') {
+      this.coursesService.update(course);
+      this.dialogRef.close();
+    } else if (this.mode === 'create') {
+      this.coursesService.add(course)
+        .subscribe(savedCourse => {
+          this.dialogRef.close();
+        });
+    }
   }
 
 

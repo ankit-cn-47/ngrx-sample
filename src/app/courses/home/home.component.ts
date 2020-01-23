@@ -1,6 +1,7 @@
+import { CourseEntityService } from './../services/course-entity.service';
 import {Component, OnInit} from '@angular/core';
 import {compareCourses, Course} from '../model/course';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditCourseDialogComponent} from '../edit-course-dialog/edit-course-dialog.component';
 import {MatDialog} from '@angular/material';
@@ -18,8 +19,6 @@ export class HomeComponent implements OnInit {
 
     promoTotal$: Observable<number>;
 
-    loading$: Observable<boolean>;
-
     beginnerCourses$: Observable<Course[]>;
 
     advancedCourses$: Observable<Course[]>;
@@ -27,7 +26,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
       private dialog: MatDialog,
-      private coursesHttpService: CoursesHttpService) {
+      private courseEntityService: CourseEntityService) {
 
     }
 
@@ -37,26 +36,19 @@ export class HomeComponent implements OnInit {
 
   reload() {
 
-    const courses$ = this.coursesHttpService.findAllCourses()
-      .pipe(
-        map(courses => courses.sort(compareCourses)),
-        shareReplay()
-      );
 
-    this.loading$ = courses$.pipe(map(courses => !!courses));
-
-    this.beginnerCourses$ = courses$
+    this.beginnerCourses$ = this.courseEntityService.entities$
       .pipe(
         map(courses => courses.filter(course => course.category == 'BEGINNER'))
       );
 
 
-    this.advancedCourses$ = courses$
+    this.advancedCourses$ = this.courseEntityService.entities$
       .pipe(
         map(courses => courses.filter(course => course.category == 'ADVANCED'))
       );
 
-    this.promoTotal$ = courses$
+    this.promoTotal$ = this.courseEntityService.entities$
         .pipe(
             map(courses => courses.filter(course => course.promo).length)
         );
@@ -68,7 +60,7 @@ export class HomeComponent implements OnInit {
     const dialogConfig = defaultDialogConfig();
 
     dialogConfig.data = {
-      dialogTitle:"Create Course",
+      dialogTitle:'Create Course',
       mode: 'create'
     };
 
