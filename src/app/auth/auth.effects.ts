@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
-import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect } from "@ngrx/effects";
-import { AuthActions } from "./actions-types";
-import { tap } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { AuthActions } from './actions-types';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 
